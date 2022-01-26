@@ -75,11 +75,11 @@ ColorVarWidget::ColorVarWidget(QString name, float r, float g, float b)
 	color.setRgbF( r, g, b );
         defaultColor = color;
 	resetButtonColor();
-	
+
 
 	// layout stuff
 	setContentsMargins( 0, 0, 0, 0 );
-	layout->setMargin( 1 );
+	layout->setContentsMargins(1, 1, 1, 1);
 	setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
 
 	setLayout(layout);

@@ -45,7 +45,7 @@ infringement.
 
 #include <fstream>
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QWidget>
 #include <QMessageBox>
 #include "MainWindow.h"
 #include "ParameterWindow.h"
@@ -102,26 +102,26 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    
+
     // center the window in the middle of the default screen
-    QDesktopWidget desktopWidget;
-    QRect rect = desktopWidget.screenGeometry();
+    QWidget desktopWidget;
+    QRect rect = desktopWidget.geometry();
     rect.adjust( 60, 60, -60, -60 );
 
     MainWindow main;
     main.setGeometry(rect);
     main.show();
     main.refresh();
-    
-    
+
+
     // open all BRDFs passed in on the commandline
     if( argc > 1 )
     {
         std::vector<std::string> files;
-        for( int i = 1; i < argc; i++ )           
+        for( int i = 1; i < argc; i++ )
             files.push_back( std::string(argv[i]) );
         main.getParameterWindow()->openBRDFFiles( files );
     }
-    
+
     return app.exec();
 }

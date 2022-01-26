@@ -76,7 +76,7 @@ FloatVarWidget::FloatVarWidget(QString name, float minVal, float maxVal, float d
     layout->addWidget( edit );
     connect(edit, SIGNAL(setToDefault()), this, SLOT(setToDefault()));
 
-    layout->setMargin( 0 );
+    layout->setContentsMargins( 0, 0, 0, 0 );
     layout->setContentsMargins( 0, 2, 0, 3 );
 
     setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
@@ -119,7 +119,7 @@ void FloatVarWidget::textChanged()
 
 float FloatVarWidget::sliderToFloat( int x )
 {
-    return minValue + (float(x) / float(1000)) * (maxValue - minValue);	
+    return minValue + (float(x) / float(1000)) * (maxValue - minValue);
 }
 
 

@@ -94,7 +94,7 @@ ParameterGroupWidget::ParameterGroupWidget( ParameterWindow* pWindow, BRDFBase* 
 
     // now let's get to the layout
     QVBoxLayout *layout = new QVBoxLayout;
-    layout->setMargin( 0 );
+    layout->setContentsMargins( 0, 0, 0, 0 );
     layout->setContentsMargins( 0, 0, 0, 0 );
 
     // the parameter window needs to know to emit changes whenever this BRDF is reloaded
@@ -103,7 +103,7 @@ ParameterGroupWidget::ParameterGroupWidget( ParameterWindow* pWindow, BRDFBase* 
 
     // add and connect the show/hide button
     titleButton = new QPushButton( QString("  ") + QString(extractFilename(brdf->getName()).c_str()) );
-    titleButton->setFixedHeight( 22 ); 
+    titleButton->setFixedHeight( 22 );
     connect( titleButton, SIGNAL(clicked()), this, SLOT(titleButtonPushed()) );
 
 
@@ -116,7 +116,7 @@ ParameterGroupWidget::ParameterGroupWidget( ParameterWindow* pWindow, BRDFBase* 
     QFrame* cmdFrame = new QFrame;
 
     QHBoxLayout* cmdLayout = new QHBoxLayout;
-    cmdLayout->setMargin( 0 );
+    cmdLayout->setContentsMargins( 0, 0, 0, 0 );
     cmdLayout->setContentsMargins( 0, 0, 0, 0 );
     cmdLayout->setSpacing( 11 );
     cmdFrame->setLayout( cmdLayout );
@@ -154,44 +154,44 @@ ParameterGroupWidget::ParameterGroupWidget( ParameterWindow* pWindow, BRDFBase* 
     soloColorsButton->setToolTip( "Solo this BRDF's color channels" );
     connect( soloColorsButton, SIGNAL(clicked()), this, SLOT(soloColorsButtonPushed()) );
     cmdLayout->addWidget( soloColorsButton );
-   
-    
+
+
     QMenu* optionsMenu = new QMenu;
     QAction* reloadAction = optionsMenu->addAction( "Reload BRDF" );
     QPixmap* reloadPixmap = new QPixmap((getImagesPath() + "reloadSmall.png").c_str());
-    reloadAction->setIcon( QIcon(*reloadPixmap) );    
+    reloadAction->setIcon( QIcon(*reloadPixmap) );
     connect( reloadAction, SIGNAL(triggered()), this, SLOT(reloadButtonPushed()) );
-    
+
     QAction* resetAction = optionsMenu->addAction( "Reload BRDF and reset to default" );
     QPixmap* resetPixmap = new QPixmap((getImagesPath() + "resetSmall.png").c_str());
     resetAction->setIcon( QIcon(*resetPixmap) );
     connect( resetAction, SIGNAL(triggered()), this, SLOT(resetButtonPushed()) );
-    
+
     QAction* saveAction = optionsMenu->addAction( "Save Parameters File..." );
     QPixmap* folderPixmap = new QPixmap((getImagesPath() + "folderSmall.png").c_str());
     saveAction->setIcon( QIcon(*folderPixmap) );
     connect( saveAction, SIGNAL(triggered()), this, SLOT(saveParamsFileButtonPushed()) );
-    
+
     optionsMenu->addSeparator();
-    
+
     QAction* closeAction = optionsMenu->addAction( "Close BRDF" );
     QPixmap* closePixmap = new QPixmap((getImagesPath() + "closeSmall.png").c_str());
     closeAction->setIcon( QIcon(*closePixmap) );
     connect( closeAction, SIGNAL(triggered()), this, SLOT(removeButtonPushed()) );
-    
+
 
     // add the button with the menu dropdown
     QPushButton* menuButton = new QPushButton();
     menuButton->setFixedWidth( 24 );
     menuButton->setFixedHeight( 20 );
-    menuButton->setMenu( optionsMenu );    
+    menuButton->setMenu( optionsMenu );
     cmdLayout->addWidget( menuButton );
 
 
     // make the container frame and its layout
     containerFrame = new QFrame;
     containerLayout = new QVBoxLayout( 0 );
-    containerLayout->setMargin( 0 );
+    containerLayout->setContentsMargins( 0, 0, 0, 0 );
     containerLayout->setContentsMargins( 0, 0, 0, 0 );
     containerLayout->addWidget( cmdFrame );
     containerLayout->setSpacing( 2 );
@@ -258,7 +258,7 @@ BRDFBase* ParameterGroupWidget::getUpdatedBRDF()
             QCheckBox* c = dynamic_cast<QCheckBox*>(brdfParamWidgets[i].widget);
             if( c ) value = c->isChecked() ? 1.0 : 0.0;
             brdf->setBoolParameterValue( boolIndex++, value );
-            
+
         }
 
         // colors
@@ -267,7 +267,7 @@ BRDFBase* ParameterGroupWidget::getUpdatedBRDF()
 			QColor value = QColor(1,1,1);
             ColorVarWidget* c = dynamic_cast<ColorVarWidget*>(brdfParamWidgets[i].widget);
             if( c ) value = c->getValue();
-            brdf->setColorParameterValue( colorIndex++, value.redF(), value.greenF(), value.blueF() );  
+            brdf->setColorParameterValue( colorIndex++, value.redF(), value.greenF(), value.blueF() );
         }
     }
 
@@ -453,24 +453,24 @@ void ParameterGroupWidget::soloColorsButtonPushed()
 
 
 void ParameterGroupWidget::saveParamsFileButtonPushed()
-{   
+{
     // sanity check - shouldn't happen
     if( !brdf )
         return;
-    
-    
+
+
     // need to come up with a default name for this save file
     QString shortBRDFName = titleButton->text().trimmed();
     int dotIndex = shortBRDFName.lastIndexOf( "." );
     if( dotIndex != -1 )
         shortBRDFName = shortBRDFName.left( dotIndex );
-    
+
 
     // get a save file name
     QString fileName = QFileDialog::getSaveFileName(this, "Save BRDF Parameters File",
                                                           QString("./") + shortBRDFName + QString(".bparam"),
                                                           "Parameter Files (*.bparam)" );
-    
+
     // if we got a filename back... save it
     if( fileName.length() )
         brdf->saveParamsFile( fileName.toLatin1().constData() );

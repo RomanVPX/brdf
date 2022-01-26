@@ -45,7 +45,7 @@ infringement.
 
 #include <QDebug>
 #include <QOpenGLContext>
-
+#include <QOpenGLVersionFunctionsFactory>
 #include "SharedContextGLWidget.h"
 
 QOpenGLContext* GLContext::glcontext = NULL;
@@ -66,7 +66,7 @@ QSurfaceFormat GLContext::surfaceFormat() {
 }
 
 void GLContext::initOpenGLContext(QWindow *window)
-{   
+{
     if( !glcontext ){
         glcontext = new QOpenGLContext();
 
@@ -84,7 +84,9 @@ void GLContext::initOpenGLContext(QWindow *window)
 
         glcontext->makeCurrent(window);
 
-        glf = glcontext->versionFunctions<GlFuncs>();
+
+        auto glf = QOpenGLVersionFunctionsFactory::get<GlFuncs>(glcontext);
+        // glf = glcontext->versionFunctions<GlFuncs>();
 
         if(!glf) {
           qCritical() << "Error: OpenGL " << OPENGL_MAJOR_VERSION << "." << OPENGL_MINOR_VERSION << " functions initialization failed! -- exiting...";
